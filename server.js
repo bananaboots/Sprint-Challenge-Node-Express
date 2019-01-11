@@ -4,6 +4,7 @@ const configMiddleware = require('./config/middleware');
 const server = express();
 
 const projectsDb = require('./data/helpers/projectModel');
+const actionsDb = require('./data/helpers/actionModel');
 
 configMiddleware(server);
 
@@ -80,6 +81,28 @@ server.put('/api/projects/:id', async (req, res) => {
                 message: 'Sorry, the project with this ID could not be found.'
             });
         }
+    } catch (err) {
+        errorHelper(res, err);
+    }
+});
+
+// delete post by post ID
+server.delete('/api/projects/:id', async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const deletedProject = await projectsDb.remove(id);
+        res.status(201).json(deletedProject);
+    } catch (err) {
+        errorHelper(res, err);
+    }
+});
+
+// get all actions
+server.get('/api/actions', async (req, res) => {
+    try {
+        const actions = await actionsDb.get();
+        res.status(200).json(actions);
     } catch (err) {
         errorHelper(res, err);
     }
