@@ -138,4 +138,23 @@ server.post('/api/actions', async (req, res) => {
     }
 });
 
+// edit an action
+server.put('/api/actions/:id', async (req, res) => {
+    const { id } = req.params;
+    const { body } = req;
+
+    try {
+        const editedAction = await actionsDb.update(id, body);
+        if (editedAction) {
+            res.status(201).json(editedAction);
+        } else {
+            res.status(404).json({
+                message: 'Sorry, the action with this ID could not be found.'
+            });
+        }
+    } catch (err) {
+        errorHelper(res, err);
+    }
+});
+
 module.exports = server;
