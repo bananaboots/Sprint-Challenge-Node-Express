@@ -91,8 +91,14 @@ server.delete('/api/projects/:id', async (req, res) => {
     const { id } = req.params;
 
     try {
-        const deletedProject = await projectsDb.remove(id);
-        res.status(201).json(deletedProject);
+        const deletedCount = await projectsDb.remove(id);
+        if (deletedCount === 1) {
+            res.status(201).json(deletedCount);
+        } else {
+            res.status(404).json({
+                message: 'Sorry, the project with this ID could not be found.'
+            });
+        }
     } catch (err) {
         errorHelper(res, err);
     }
@@ -147,6 +153,24 @@ server.put('/api/actions/:id', async (req, res) => {
         const editedAction = await actionsDb.update(id, body);
         if (editedAction) {
             res.status(201).json(editedAction);
+        } else {
+            res.status(404).json({
+                message: 'Sorry, the action with this ID could not be found.'
+            });
+        }
+    } catch (err) {
+        errorHelper(res, err);
+    }
+});
+
+// delete an action
+server.delete('/api/actions/:id', async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const deletedCount = await actionsDb.remove(id);
+        if (deletedCount === 1) {
+            res.status(200).json(deletedCount);
         } else {
             res.status(404).json({
                 message: 'Sorry, the action with this ID could not be found.'
