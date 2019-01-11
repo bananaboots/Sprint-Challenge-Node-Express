@@ -27,12 +27,31 @@ server.get('/api/projects', async (req, res) => {
 // get project by project ID
 server.get('/api/projects/:id', async (req, res) => {
     const { id } = req.params;
+
     try {
         const project = await projectsDb.get(id);
         res.status(200).json(project);
     } catch (err) {
         errorHelper(res, err);
     }
-})
+});
+
+// get project actions by project ID
+server.get('/api/projects/:id/actions', async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const actions = await projectsDb.getProjectActions(id);
+        if (actions) {
+            res.status(200).json(actions);
+        } else {
+            res.status(404).json({
+                message: 'Sorry, the project with this ID could not be found.'
+            })
+        }
+    } catch (err) {
+        errorHelper(res, err);
+    }
+});
 
 module.exports = server;
