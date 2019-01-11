@@ -20,8 +20,19 @@ server.get('/api/projects', async (req, res) => {
         const projects = await projectsDb.get();
         res.status(200).json(projects);
     } catch (err) {
-        errorHelper(res, err)
+        errorHelper(res, err);
     }
 });
+
+// get project by project ID
+server.get('/api/projects/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        const project = await projectsDb.get(id);
+        res.status(200).json(project);
+    } catch (err) {
+        errorHelper(res, err);
+    }
+})
 
 module.exports = server;
