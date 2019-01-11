@@ -126,4 +126,16 @@ server.get('/api/actions/:id', async (req, res) => {
     }
 });
 
+// create new action
+server.post('/api/actions', async (req, res) => {
+    const { body } = req;
+
+    try {
+        const newAction = await actionsDb.insert(body);
+        res.status(201).json(newAction);
+    } catch (err) {
+        errorHelper(res, err);
+    }
+});
+
 module.exports = server;
