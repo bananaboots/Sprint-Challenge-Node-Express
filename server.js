@@ -59,8 +59,27 @@ server.post('/api/projects', async (req, res) => {
     const { body } = req;
     
     try {
-        const project = await projectsDb.insert(body);
-        res.status(201).json(project);
+        const newProject = await projectsDb.insert(body);
+        res.status(201).json(newProject);
+    } catch (err) {
+        errorHelper(res, err);
+    }
+});
+
+// edit project
+server.put('/api/projects/:id', async (req, res) => {
+    const { id } = req.params;
+    const { body } = req;
+
+    try {
+        const editedProject = await projectsDb.update(id, body);
+        if (editedProject) {
+            res.status(201).json(editedProject);
+        } else {
+            res.status(404).json({
+                message: 'Sorry, the project with this ID could not be found.'
+            });
+        }
     } catch (err) {
         errorHelper(res, err);
     }
