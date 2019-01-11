@@ -54,4 +54,16 @@ server.get('/api/projects/:id/actions', async (req, res) => {
     }
 });
 
+// add project
+server.post('/api/projects', async (req, res) => {
+    const { body } = req;
+    
+    try {
+        const project = await projectsDb.insert(body);
+        res.status(201).json(project);
+    } catch (err) {
+        errorHelper(res, err);
+    }
+});
+
 module.exports = server;
