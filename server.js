@@ -108,4 +108,22 @@ server.get('/api/actions', async (req, res) => {
     }
 });
 
+// get action by action ID
+server.get('/api/actions/:id', async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const action = await actionsDb.get(id);
+        if (action) {
+            res.status(200).json(action);
+        } else {
+            res.status(404).json({
+                message: 'The action with this ID could not be found.'
+            });
+        }
+    } catch (err) {
+        errorHelper(res, err);
+    }
+});
+
 module.exports = server;
